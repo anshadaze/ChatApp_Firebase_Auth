@@ -6,11 +6,29 @@ import 'package:authentication/widgets/textfield_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   final Function()? onTap;
    LoginPage({super.key,required this.onTap});
 
- 
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  
+  void signIn()async{
+
+    final authProvider=Provider.of<AuthProvider>(context,listen: false);
+    try{
+      await authProvider.signInWithEmailandPassword(
+        authProvider. LoginEmailTextController.text,
+       authProvider.LoginPassWordTextController.text);
+  
+    }catch(e){
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString(),),),);
+
+    }
+  }
   @override
   Widget build(BuildContext context) {
         var authprovider=Provider.of<AuthProvider>(context);
@@ -45,7 +63,7 @@ class LoginPage extends StatelessWidget {
             kHeigt10,
             
             //sign in button
-            MyButton(onTap:(){},
+            MyButton(onTap:signIn,
              text:'Sign In'),
             kHeigt25,
             // go to register page
@@ -55,7 +73,7 @@ class LoginPage extends StatelessWidget {
               Text('Not a member?',style: TextStyle(color: Colors.grey[700]),),
               const SizedBox(width: 4,),
               GestureDetector(
-                onTap: onTap,
+                onTap: widget.onTap,
                 child: Text("Register now",style: TextStyle(fontWeight: FontWeight.bold,color:kBlueColor ),))
              ],
           )

@@ -9,14 +9,17 @@ class MyButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height:60,
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color:kBlackColor,
-        borderRadius: BorderRadius.circular(8)
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height:60,
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color:kBlackColor,
+          borderRadius: BorderRadius.circular(8)
+        ),
+        child: Center(child: Text(text,style: TextStyle(color:kWhiteColor,fontWeight: FontWeight.bold,fontSize: 16),),),
       ),
-      child: Center(child: Text(text,style: TextStyle(color:kWhiteColor,fontWeight: FontWeight.bold,fontSize: 16),),),
     );
   }
 }
