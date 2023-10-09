@@ -12,6 +12,18 @@ class AuthProvider extends ChangeNotifier {
   TextEditingController LoginPassWordTextController = TextEditingController();
 
   bool showLoginPage = true;
+     //instance of auth
+final FirebaseAuth _firebaseAuth=FirebaseAuth.instance;
+  User? _user;
+
+
+  AuthProvider(){
+  _firebaseAuth.authStateChanges().listen((user) {
+    _user=user;
+    notifyListeners();
+   });
+  }
+    User? get user => _user;
 
   void togglepages() {
     showLoginPage = !showLoginPage;
@@ -20,8 +32,7 @@ class AuthProvider extends ChangeNotifier {
 
 
 
-   //instance of auth
-final FirebaseAuth _firebaseAuth=FirebaseAuth.instance;
+
 
 // sign user in
 Future<UserCredential> signInWithEmailandPassword(String email,String password)async{
