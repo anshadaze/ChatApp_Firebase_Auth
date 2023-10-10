@@ -16,19 +16,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   
-  void signIn()async{
 
-    final authProvider=Provider.of<AuthProvider>(context,listen: false);
-    try{
-      await authProvider.signInWithEmailandPassword(
-        authProvider. LoginEmailTextController.text,
-       authProvider.LoginPassWordTextController.text);
-  
-    }catch(e){
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString(),),),);
-
-    }
-  }
   @override
   Widget build(BuildContext context) {
         var authprovider=Provider.of<AuthProvider>(context);
@@ -83,5 +71,19 @@ class _LoginPageState extends State<LoginPage> {
      ),
 
     ));
+  }
+
+    //sign in button ontap
+    void signIn()async{
+final authProvider=Provider.of<AuthProvider>(context,listen: false);
+    try{
+      await authProvider.signInWithEmailandPassword(
+        authProvider. LoginEmailTextController.text,
+       authProvider.LoginPassWordTextController.text);
+  
+    }catch(e){
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString(),),),);
+
+    }
   }
 }

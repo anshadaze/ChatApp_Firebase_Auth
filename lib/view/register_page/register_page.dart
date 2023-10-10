@@ -15,31 +15,7 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  //sign up user
-  void signUp() async {
-    //get authprovider
-    final authprovider = Provider.of<AuthProvider>(context, listen: false);
-    if (authprovider.registerPassWordTextController.text !=
-        authprovider.registerConformPasswordTextController.text) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Passwords do not match!"),
-        ),
-      );
-      return;
-    }
-    try {
-      await authprovider.signUpWithEmailandPassword(
-          authprovider.registerEmailTextController.text,
-          authprovider.registerPassWordTextController.text);
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(e.toString()),
-        ),
-      );
-    }
-  }
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -116,5 +92,33 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
       ),
     ));
+  }
+
+
+
+   //sign up user
+  void signUp() async {
+    //get authprovider
+    final authprovider = Provider.of<AuthProvider>(context,listen: false);
+    if (authprovider.registerPassWordTextController.text !=
+        authprovider.registerConformPasswordTextController.text) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Passwords do not match!"),
+        ),
+      );
+      return;
+    }
+    try {
+      await authprovider.signUpWithEmailandPassword(
+          authprovider.registerEmailTextController.text,
+          authprovider.registerPassWordTextController.text);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.toString()),
+        ),
+      );
+    }
   }
 }
