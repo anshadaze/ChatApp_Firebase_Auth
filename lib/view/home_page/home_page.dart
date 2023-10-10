@@ -6,21 +6,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   HomePage({super.key});
 
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  
-
- 
-
-  
-
-            
+     //user
+  final currentUser = FirebaseAuth.instance.currentUser!;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +23,11 @@ class _HomePageState extends State<HomePage> {
         actions: [
           //sign out button
           IconButton(
-            onPressed: signOut,
+            onPressed: (){
+                //get auth service
+             final authprovider = Provider.of<AuthProvider>(context, listen: false);
+                authprovider.signOut();
+            },
             icon: const Icon(Icons.logout),
           ),
         ],
@@ -79,36 +73,27 @@ class _HomePageState extends State<HomePage> {
                           obscureText: false)),
                   //post button
                   IconButton(
-                      onPressed:postMessage,
+                      onPressed:()async{
+                        
+                          final postsprovider = Provider.of<PostsProvider>(context,listen: false);
+              //only post if there is something in the textfield
+              if(postsprovider.textController.text.isNotEmpty){
+               postsprovider.addPost(currentUser.email!,postsprovider.textController.text);
+
+              postsprovider.textController.clear();
+                
+              }
+                      },
                       icon: Icon(Icons.arrow_circle_up))
                 ],
               ),
             ),
 
             //logged in as
-            Text('Logged in as:' +  postsprovider.currentUser.email!),
+            Text('Logged in as:' +  currentUser.email!),
           ],
         ),
       ),
     );
   }
-
-
-  //sign user out
-  void signOut() {
-    //get auth service
-    final authprovider = Provider.of<AuthProvider>(context, listen: false);
-    authprovider.signOut();
-  }
-     //post message
-            void postMessage(){ 
-              final postsprovider = Provider.of<PostsProvider>(context,listen: false);
-              //only post if there is something in the textfield
-              if(postsprovider.textController.text.isNotEmpty){
-               postsprovider.addPost(postsprovider.currentUser.email!,postsprovider.textController.text);
-
-              postsprovider.textController.clear();
-                
-              }
-            }
 }

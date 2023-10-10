@@ -7,8 +7,7 @@ class PostsProvider extends ChangeNotifier{
   PostsServices postsservices=PostsServices();
   //text controller
   final textController = TextEditingController();
-   //user
-  final currentUser = FirebaseAuth.instance.currentUser!;
+
 
   List<DocumentSnapshot>posts=[];
 

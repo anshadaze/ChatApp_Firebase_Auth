@@ -22,7 +22,6 @@ class AuthProvider extends ChangeNotifier {
   AuthProvider(){
   authservices.firebaseAuth.authStateChanges().listen((user) {
     _user=user;
-    // fetchPosts();
     notifyListeners();
    });
   }

@@ -6,16 +6,10 @@ import 'package:authentication/widgets/textfield_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class RegisterPage extends StatefulWidget {
+class RegisterPage extends StatelessWidget {
   final Function()? onTap;
   RegisterPage({super.key, required this.onTap});
-
-  @override
-  State<RegisterPage> createState() => _RegisterPageState();
-}
-
-class _RegisterPageState extends State<RegisterPage> {
- 
+  final formkey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -23,102 +17,134 @@ class _RegisterPageState extends State<RegisterPage> {
     return SafeArea(
         child: Scaffold(
       backgroundColor: backgroundcolor,
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              //lgo
-              const Icon(
-                Icons.lock,
-                size: 100,
-              ),
-              kHeigt50,
-
-              //welcome back messege
-              const Text("Lets create an account for you"),
-              kHeigt25,
-
-              //email textfield
-              MyTextField(
-                  controller: authprovider.registerEmailTextController,
-                  hintText: 'Email',
-                  obscureText: false),
-              kHeigt25,
-
-              //password textfield
-              MyTextField(
-                  controller: authprovider.registerPassWordTextController,
-                  hintText: 'Password',
-                  obscureText: true),
-
-              kHeigt10,
-
-              //conform password textfiled
-              MyTextField(
-                  controller:
-                      authprovider.registerConformPasswordTextController,
-                  hintText: 'Conform Password',
-                  obscureText: true),
-
-              kHeigt10,
-
-              //sign in button
-              MyButton(onTap: signUp, text: 'Sign Up'),
-              kHeigt25,
-              // go to register page
-              Row(
+      body: Form(
+        key: formkey,
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: SingleChildScrollView(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    'Already have an account?',
-                    style: TextStyle(color: Colors.grey[700]),
+                  //lgo
+                  const Icon(
+                    Icons.lock,
+                    size: 100,
                   ),
-                  const SizedBox(
-                    width: 4,
+                  kHeigt50,
+
+                  //welcome back messege
+                  const Text("Lets create an account for you"),
+                  kHeigt25,
+
+                  //email textfield
+                  MyTextField(
+                    controller: authprovider.registerEmailTextController,
+                    hintText: 'Email',
+                    obscureText: false,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'please enter email';
+                      }
+                    },
                   ),
-                  GestureDetector(
-                      onTap: widget.onTap,
-                      child: Text(
-                        "Login now",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, color: kBlueColor),
-                      ))
+                  kHeigt25,
+
+                  //password textfield
+                  MyTextField(
+                    controller: authprovider.registerPassWordTextController,
+                    hintText: 'Password',
+                    obscureText: true,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'please enter password';
+                      }
+                    },
+                  ),
+
+                  kHeigt10,
+
+                  //conform password textfiled
+                  MyTextField(
+                    controller:
+                        authprovider.registerConformPasswordTextController,
+                    hintText: 'Confirm Password',
+                    obscureText: true,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'please enter confirm password';
+                      } else if (authprovider
+                              .registerPassWordTextController.text !=
+                          authprovider
+                              .registerConformPasswordTextController.text) {
+                        return 'Passwords do not match!';
+                      }
+                    },
+                  ),
+
+                  kHeigt10,
+
+                  //sign in button
+                  MyButton(
+                      onTap: () async {
+                        if (formkey.currentState!.validate()) {
+                          final authprovider =
+                              Provider.of<AuthProvider>(context, listen: false);
+                          if (authprovider
+                                  .registerPassWordTextController.text !=
+                              authprovider
+                                  .registerConformPasswordTextController.text) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("Passwords do not match!"),
+                              ),
+                            );
+                            return;
+                          }
+                          try {
+                            await authprovider.signUpWithEmailandPassword(
+                                authprovider.registerEmailTextController.text,
+                                authprovider
+                                    .registerPassWordTextController.text);
+                            authprovider.registerEmailTextController.clear();
+                            authprovider.registerPassWordTextController.clear();
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(e.toString()),
+                              ),
+                            );
+                          }
+                        }
+                      },
+                      text: 'Sign Up'),
+                  kHeigt25,
+                  // go to register page
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Already have an account?',
+                        style: TextStyle(color: Colors.grey[700]),
+                      ),
+                      const SizedBox(
+                        width: 4,
+                      ),
+                      GestureDetector(
+                          onTap: onTap,
+                          child: Text(
+                            "Login now",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, color: kBlueColor),
+                          ))
+                    ],
+                  )
                 ],
-              )
-            ],
+              ),
+            ),
           ),
         ),
       ),
     ));
-  }
-
-
-
-   //sign up user
-  void signUp() async {
-    //get authprovider
-    final authprovider = Provider.of<AuthProvider>(context,listen: false);
-    if (authprovider.registerPassWordTextController.text !=
-        authprovider.registerConformPasswordTextController.text) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Passwords do not match!"),
-        ),
-      );
-      return;
-    }
-    try {
-      await authprovider.signUpWithEmailandPassword(
-          authprovider.registerEmailTextController.text,
-          authprovider.registerPassWordTextController.text);
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(e.toString()),
-        ),
-      );
-    }
   }
 }
