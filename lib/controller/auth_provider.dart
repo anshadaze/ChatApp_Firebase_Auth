@@ -15,11 +15,13 @@ class AuthProvider extends ChangeNotifier {
      //instance of auth
 final FirebaseAuth _firebaseAuth=FirebaseAuth.instance;
   User? _user;
+  List<DocumentSnapshot>posts=[];
 
 
   AuthProvider(){
   _firebaseAuth.authStateChanges().listen((user) {
     _user=user;
+    fetchPosts();
     notifyListeners();
    });
   }
@@ -59,6 +61,32 @@ Future<UserCredential>signUpWithEmailandPassword(String email,password)async{
     return userCredential;
   }on FirebaseAuthMultiFactorException catch(e){
    throw Exception(e.code);
+  }
+}
+
+//Fetch posts from Firebase Firestore
+Future<void>fetchPosts()async{
+  try{
+    final querySnapshot=await FirebaseFirestore.instance.collection("User Posts").orderBy("TimeStamp",descending: false).get();
+    posts=querySnapshot.docs;
+    notifyListeners();
+  }catch(e){
+    throw Exception(e.toString());
+  }
+}
+
+Future<void>addPost(String user,String message)async{
+  try{
+    await FirebaseFirestore.instance.collection("User Posts").add({
+      'UserEmail':user,
+      'Message':message,
+      'TimeStamp':Timestamp.now(),
+    });
+    //update the post list after adding a new post
+    await fetchPosts();
+  }catch(e){
+    throw Exception(e.toString());
+
   }
 }
 

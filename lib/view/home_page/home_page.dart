@@ -1,7 +1,6 @@
 import 'package:authentication/controller/auth_provider.dart';
 import 'package:authentication/view/home_page/widgets/wall_post_widget.dart';
 import 'package:authentication/widgets/textfield_widget.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -31,11 +30,10 @@ class _HomePageState extends State<HomePage> {
               //only post if there is something in the textfield
               if(textController.text.isNotEmpty){
                 ///store in firebase
-                FirebaseFirestore.instance.collection("User Posts").add({
-                 'UserEmail':currentUser.email,
-                 'Message':textController.text,
-                 'TimeStamp':Timestamp.now(),
-                });
+               final provider=Provider.of<AuthProvider>(context,listen: false);
+               provider.addPost(currentUser.email!, textController.text);
+
+               textController.clear();
                 
               }
             }
@@ -62,35 +60,25 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           children: [
             //the wall
-            Expanded(
-                child: StreamBuilder(
-              stream: FirebaseFirestore.instance
-                  .collection("User Posts")
-                  .orderBy("TimeStamp", descending: false)
-                  .snapshots(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return ListView.builder(
+          Consumer<AuthProvider>(
+            builder:(context, authprovider, child) {
+              final posts=authprovider.posts;
+              if(posts.isEmpty){
+                 return Center(child: Text('No posts available.'));
+              }else{
+                return Expanded(
+                  child:ListView.builder(
+                  itemCount: posts.length,
+                    itemBuilder:(context, index) {
+                      final post=posts[index];
 
-                    
-
-
-                    itemCount:snapshot.data!.docs.length,
-                    itemBuilder: (context, index) {
-                      //get the message
-                      final post = snapshot.data!.docs[index];
                       return WallPost(
-                        message: post['Message'],
-                        user: post['UserEmail'],
-                      );
-                    },
-                  );
-                }else if(snapshot.hasError){
-                  return Center(child: Text('error:'+snapshot.error.toString()),);
-                }
-                return const Center(child: CircularProgressIndicator(),);
+                        message:post['Message'],
+                         user: post['UserEmail']);
+                    },));
               }
-            )),
+              
+            },),
 
          
 
