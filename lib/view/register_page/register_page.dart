@@ -3,6 +3,7 @@ import 'package:authentication/controller/auth_provider.dart';
 import 'package:authentication/helpers/colors.dart';
 import 'package:authentication/widgets/button.dart';
 import 'package:authentication/widgets/textfield_widget.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -45,6 +46,8 @@ class RegisterPage extends StatelessWidget {
                     validator: (value) {
                       if (value!.isEmpty) {
                         return 'please enter email';
+                      } else if (!EmailValidator.validate(value)) {
+                        return 'Invalid email';
                       }
                     },
                   ),
@@ -58,6 +61,8 @@ class RegisterPage extends StatelessWidget {
                     validator: (value) {
                       if (value!.isEmpty) {
                         return 'please enter password';
+                      } else if (value.length < 6) {
+                        return 'Password should be at least 6 characters';
                       }
                     },
                   ),
@@ -108,10 +113,13 @@ class RegisterPage extends StatelessWidget {
                                     .registerPassWordTextController.text);
                             authprovider.registerEmailTextController.clear();
                             authprovider.registerPassWordTextController.clear();
+                            authprovider.registerConformPasswordTextController
+                                .clear();
                           } catch (e) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content: Text(e.toString()),
+                                content: Text(
+                                    'The email addresss is already use by another account'),
                               ),
                             );
                           }

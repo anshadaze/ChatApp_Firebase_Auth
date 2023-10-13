@@ -12,19 +12,13 @@ class LoginOrRegister extends StatefulWidget {
 }
 
 class _LoginOrRegisterState extends State<LoginOrRegister> {
-
-
-
   @override
   Widget build(BuildContext context) {
-      var authprovider=Provider.of<AuthProvider>(context);
-   if(authprovider.showLoginPage){
-  
-    return LoginPage(onTap:authprovider.togglepages);
-    
-   }else{
-    
-    return RegisterPage(onTap:authprovider.togglepages); 
-   }
+    var authprovider = Provider.of<AuthProvider>(context);
+    if (authprovider.showLoginPage) {
+      return LoginPage(onTap: authprovider.togglepages);
+    } else {
+      return RegisterPage(onTap: authprovider.togglepages);
+    }
   }
 }

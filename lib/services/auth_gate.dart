@@ -11,9 +11,7 @@ class AuthGate extends StatelessWidget {
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
     return Scaffold(
-      body:authProvider.user!=null
-      ?HomePage()
-      :LoginOrRegister(),
+      body: authProvider.user != null ? HomePage() : LoginOrRegister(),
     );
   }
 }

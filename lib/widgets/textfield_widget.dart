@@ -12,28 +12,23 @@ class MyTextField extends StatelessWidget {
       required this.controller,
       required this.hintText,
       required this.obscureText,
-       this.validator});
+      this.validator});
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller: controller,
-      obscureText: obscureText,
-      decoration: InputDecoration(
-        enabledBorder:  OutlineInputBorder(
-         borderSide: BorderSide(color: kWhiteColor)
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: kWhiteColor), 
-        ),
-        fillColor:kgreyColor,
-        filled: true,
-        hintText: hintText,
-        hintStyle:hintStyle
-      ),
-
-      validator: validator
-    
-    );
+        controller: controller,
+        obscureText: obscureText,
+        decoration: InputDecoration(
+            enabledBorder:
+                OutlineInputBorder(borderSide: BorderSide(color: kWhiteColor)),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: kWhiteColor),
+            ),
+            fillColor: kgreyColor,
+            filled: true,
+            hintText: hintText,
+            hintStyle: hintStyle),
+        validator: validator);
   }
 }

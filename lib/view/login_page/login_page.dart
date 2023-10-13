@@ -3,6 +3,8 @@ import 'package:authentication/controller/auth_provider.dart';
 import 'package:authentication/helpers/colors.dart';
 import 'package:authentication/widgets/button.dart';
 import 'package:authentication/widgets/textfield_widget.dart';
+import 'package:email_validator/email_validator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -46,6 +48,8 @@ class LoginPage extends StatelessWidget {
                     validator: (value) {
                       if (value!.isEmpty) {
                         return 'please enter email';
+                      } else if (!EmailValidator.validate(value)) {
+                        return 'Invalid email';
                       }
                     },
                   ),
@@ -53,16 +57,15 @@ class LoginPage extends StatelessWidget {
 
                   //password textfield
                   MyTextField(
-                      controller: authprovider.LoginPassWordTextController,
-                      hintText: 'Password',
-                      obscureText: true,
-                       validator: (value) {
+                    controller: authprovider.LoginPassWordTextController,
+                    hintText: 'Password',
+                    obscureText: true,
+                    validator: (value) {
                       if (value!.isEmpty) {
                         return 'please enter password';
                       }
                     },
-                      ),
-                      
+                  ),
 
                   kHeigt10,
 
@@ -82,7 +85,7 @@ class LoginPage extends StatelessWidget {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text(
-                                  e.toString(),
+                                  "Email and Password don't match",
                                 ),
                               ),
                             );
