@@ -4,6 +4,7 @@ import 'package:authentication/view/home_page/widgets/chaton_post_widget.dart';
 import 'package:authentication/widgets/textfield_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
@@ -23,11 +24,12 @@ class HomePage extends StatelessWidget {
         actions: [
           //sign out button
           IconButton(
-            onPressed: () {
+            onPressed: ()async {
               //get auth service
               final authprovider =
                   Provider.of<AuthProvider>(context, listen: false);
               authprovider.signOut();
+               
             },
             icon: const Icon(Icons.logout),
           ),
@@ -83,7 +85,7 @@ class HomePage extends StatelessWidget {
                           postsprovider.textController.clear();
                         }
                       },
-                      icon: Icon(Icons.arrow_circle_up))
+                      icon: const Icon(Icons.arrow_circle_up))
                 ],
               ),
             ),

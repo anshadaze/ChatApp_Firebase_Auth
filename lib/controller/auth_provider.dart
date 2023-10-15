@@ -1,6 +1,7 @@
 import 'package:authentication/services/auth_services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthProvider extends ChangeNotifier {
   AuthServices authservices = AuthServices();
@@ -14,6 +15,7 @@ class AuthProvider extends ChangeNotifier {
   TextEditingController LoginPassWordTextController = TextEditingController();
 
   bool showLoginPage = true;
+  final isGoogleLoading=false;
   //instance of auth
 
   User? _user;
@@ -33,8 +35,11 @@ class AuthProvider extends ChangeNotifier {
 
 //sign user out
   Future<void> signOut() async {
-    return await FirebaseAuth.instance.signOut();
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signOut();
+     FirebaseAuth.instance.signOut();
+    
   }
+  
 
   Future<UserCredential> signInWithEmailandPassword(
       String email, String password) async {
@@ -45,5 +50,11 @@ class AuthProvider extends ChangeNotifier {
   Future<UserCredential> signUpWithEmailandPassword(
       String email, password) async {
     return authservices.signUpWithEmailandPassword(email, password);
+  }
+
+
+   //google sign in
+  Future<UserCredential> signInWithGoogle()async{
+    return authservices.signInWithGoogle();
   }
 }

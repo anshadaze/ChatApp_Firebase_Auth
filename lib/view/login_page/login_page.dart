@@ -1,6 +1,7 @@
 import 'package:authentication/constants/constants.dart';
 import 'package:authentication/controller/auth_provider.dart';
 import 'package:authentication/helpers/colors.dart';
+import 'package:authentication/services/auth_services.dart';
 import 'package:authentication/widgets/button.dart';
 import 'package:authentication/widgets/textfield_widget.dart';
 import 'package:email_validator/email_validator.dart';
@@ -94,6 +95,32 @@ class LoginPage extends StatelessWidget {
                       },
                       text: 'Sign In'),
                   kHeigt25,
+
+                  //or continue with
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Divider(thickness: 0.5, color: Colors.grey[400]),
+                      ),
+                      Text('Or continue with'),
+                      kHeigt10,
+                      Expanded(
+                        child: Divider(thickness: 0.5, color: Colors.grey[400]),
+                      ),
+                    ],
+                  ),
+
+                  //google button
+                  GestureDetector(
+                    onTap: (){
+                      authprovider.signInWithGoogle();
+                    },
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(16),
+                      child: Image.asset('assets/google_icon.jpg',height: 72,)),
+                  ),
+                  kHeigt25,
+                  
                   // go to register page
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
