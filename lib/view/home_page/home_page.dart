@@ -1,4 +1,5 @@
 import 'package:authentication/controller/auth_provider.dart';
+import 'package:authentication/controller/internetconnectivity_provider.dart';
 import 'package:authentication/controller/posts_provider.dart';
 import 'package:authentication/view/home_page/widgets/chaton_post_widget.dart';
 import 'package:authentication/widgets/textfield_widget.dart';
@@ -15,6 +16,8 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<InternetConnectivityProvider>(context, listen: false)
+                  .getInternetConnectivity(context);
     final postsprovider = Provider.of<PostsProvider>(context, listen: false);
     return Scaffold(
       backgroundColor: Colors.blueGrey,
@@ -41,6 +44,7 @@ class HomePage extends StatelessWidget {
             //the chat area
             Consumer<PostsProvider>(
               builder: (context, postsprovider, child) {
+                   
                 final posts = postsprovider.posts;
                 if (posts.isEmpty) {
                   return Center(child: Text('No posts available.'));

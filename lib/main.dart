@@ -1,4 +1,5 @@
 import 'package:authentication/controller/auth_provider.dart';
+import 'package:authentication/controller/internetconnectivity_provider.dart';
 import 'package:authentication/controller/posts_provider.dart';
 import 'package:authentication/firebase_options.dart';
 import 'package:authentication/services/auth_gate.dart';
@@ -25,6 +26,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => PostsProvider(),
+        ),
+          ChangeNotifierProvider(
+          create: (context) => InternetConnectivityProvider(),
         ),
       ],
       child: MaterialApp(

@@ -1,5 +1,6 @@
 import 'package:authentication/constants/constants.dart';
 import 'package:authentication/controller/auth_provider.dart';
+import 'package:authentication/controller/internetconnectivity_provider.dart';
 import 'package:authentication/helpers/colors.dart';
 import 'package:authentication/services/auth_services.dart';
 import 'package:authentication/widgets/button.dart';
@@ -15,6 +16,8 @@ class RegisterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+       Provider.of<InternetConnectivityProvider>(context, listen: false)
+                  .getInternetConnectivity(context);
     var authprovider = Provider.of<AuthProvider>(context);
     return SafeArea(
         child: Scaffold(
